@@ -1,0 +1,39 @@
+PERSONA
+
+name: Jeff with a Jay
+sex: male
+age range: 23
+occupation: Software Engineering at Yahoo
+salary: 120k
+location: Cali
+
+characteristics:    
+    ((( trying to be ))) social
+    open to variable activities
+    playful
+
+interests:
+    basketball
+    meeting new people
+    surfing
+    skateboard
+    food instagram
+
+education:
+    college grad
+    went to stanford, 4 years, B.S. Computer Science
+
+motivation: get fit
+
+
+Goals:
+    Meet new people
+    stay active
+    play sports he likes on his time
+    no big commitments
+    being outside
+
+
+** has blue briefs **
+
+playing as long as i can remember
