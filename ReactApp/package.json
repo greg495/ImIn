@@ -4,7 +4,7 @@
   "description": "A web mobile app designed to make organizing pick up games easier.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot",
+    "start": "webpack-dev-server --host 129.161.49.66 --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +22,8 @@
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.22.0",
+    "express": "^4.14.1",
+    "mssql": "^3.3.0",
     "mysql": "^2.13.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
