@@ -4,7 +4,7 @@
   "description": "A web mobile app designed to make organizing pick up games easier.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --host 129.161.49.66 --hot",
+    "start": "webpack-dev-server --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
