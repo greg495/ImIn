@@ -4,34 +4,13 @@
       <meta charset = "UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>React App</title>
+      <title>form</title>
 
       <!-- CSS Files -->
       <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
    </head>
 
    <body>
-
-        <script>
-          window.fbAsyncInit = function() {
-            FB.init({
-              appId      : '274178513017639',
-              cookie     : true,
-              xfbml      : true,
-              version    : 'v2.8'
-            });
-            FB.AppEvents.logPageView();   
-          };
-
-          (function(d, s, id){
-             var js, fjs = d.getElementsByTagName(s)[0];
-             if (d.getElementById(id)) {return;}
-             js = d.createElement(s); js.id = id;
-             js.src = "//connect.facebook.net/en_US/sdk.js";
-             fjs.parentNode.insertBefore(js, fjs);
-           }(document, 'script', 'facebook-jssdk'));
-        </script>
-
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -39,22 +18,34 @@
                     <img alt="ImIn" src="...">
                 </a>
                 <button type="button" class="btn btn-default navbar-btn">Sign in</button>
-
-                <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="true"></div>
-
-
                 </div>
             </div>
         </nav>
-
         <div id="map" style="width:400px;height:400px;"></div>
         <div id="chat"></div>
         <div id="sql"></div>
+        <form action="/connect-to-sql.js">
+            Event Name: <input type="text" name="eventName">
+            <!-- <Sport Category:<br>>
+            <input type="radio" name="gender" value="Basketball" checked> Male<br>
+            <input type="radio" name="gender" value="Baseball"> Baseball<br>
+            <input type="radio" name="gender" value="Tennis"> Tennis<br>
+            <input type="radio" name="gender" value="Frisbee"> Frisbee<br>
+            <input type="radio" name="gender" value="Soccer"> Soccer<br> -->
+            <select name="sport">
+                <option value="BasketBall">Basketball</option>
+                <option value="Baseball">Baseball</option>
+                <option value="Tennis">Tennis</option>
+                <option value="Frisbee">Frisbee</option>
+                <option value="Soccer">Soccer</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUB6UcR297wu7yC46x_4FTmoIbEY0DT_A&callback=myMap"></script>
-        <script src="index.js"></script>
+         <script src="index.js"></script> -->
         <!-- <script src="backend_index.js"></script> -->
    </body>
 </html>
