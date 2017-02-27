@@ -1,3 +1,4 @@
+var path = require('path');
 /*var config = {
    entry: './main.js',
 	
@@ -27,12 +28,14 @@
 }
 
 module.exports = config;*/
+
+process.traceDeprecation = true;
 const common = {
-    module: {
+    /*module: {
         loaders: [
             {
                 test: /\.jsx?$/,
-                exclude: /node_modules/,
+                //exclude: /node_modules/,
                 loader: 'babel-loader',
                     
                 query: {
@@ -40,17 +43,35 @@ const common = {
                 }
             }
         ]
-    },
-    resolve: {
+    }*///resolve: {
+        module: {
+            rules: [{
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: [{ 
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['es2015', 'react']
+                    }
+                }]
+            }]
+        },
+        resolve: {
+            modules: [path.resolve(__dirname, './'), path.resolve(__dirname, "node_modules")],
+            extensions: ['.js', '.jsx']
+        }, // common extensions
+    //},
+    /*resolveLoader: {
         extensions: ['.js', '.jsx'] // common extensions
-    },
+    },*/
     devServer: {
       inline: true,
       port: 8008,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "http://localhost:8008",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
         "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+        //,"Access-Control-Allow-Credentials": "true"
       }
    }
     // other plugins, postcss config etc. common for frontend and backend
@@ -63,6 +84,9 @@ const frontend = {
      output: {
         path:'/',
         filename: 'index.js',
+    },
+    externals: {
+        //punycode: './node_modules/punycode'
     }
      // other loaders, plugins etc. specific for frontend
 };
