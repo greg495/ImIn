@@ -21,6 +21,7 @@
               version    : 'v2.8'
             });
             FB.AppEvents.logPageView();   
+            fbLoaded();
           };
 
           (function(d, s, id){
@@ -35,13 +36,13 @@
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    <img alt="ImIn" src="...">
-                </a>
-                <button type="button" class="btn btn-default navbar-btn">Sign in</button>
+                  <a class="navbar-brand" href="#">
+                      <img alt="ImIn" src="...">
+                  </a>
 
-                <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="true"></div>
-
+                  <div id="username">username </div>
+                  <img src="..." id="profile_picture" alt="profile_picture" style="width:50px;height:50px;">
+                  <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="true"></div>
 
                 </div>
             </div>
@@ -56,5 +57,8 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUB6UcR297wu7yC46x_4FTmoIbEY0DT_A&callback=myMap"></script>
         <script src="index.js"></script>
         <!-- <script src="backend_index.js"></script> -->
+        <script src="facebookAPI.js"></script>
+      
+
    </body>
 </html>
