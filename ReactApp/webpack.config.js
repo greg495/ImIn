@@ -1,69 +1,23 @@
 var path = require('path');
-/*var config = {
-   entry: './main.js',
-	
-   output: {
-      path:'/',
-      filename: 'index.js',
-   },
-	
-   devServer: {
-      inline: true,
-      port: 8008
-   },
-	
-   module: {
-      loaders: [
-         {
+process.traceDeprecation = true;
+
+const common = {
+    module: {
+        rules: [{
             test: /\.jsx?$/,
             exclude: /node_modules/,
-            loader: 'babel-loader',
-				
-            query: {
-               presets: ['es2015', 'react']
-            }
-         }
-      ]
-   }
-}
-
-module.exports = config;*/
-
-process.traceDeprecation = true;
-const common = {
-    /*module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                //exclude: /node_modules/,
+            use: [{ 
                 loader: 'babel-loader',
-                    
-                query: {
-                presets: ['es2015', 'react']
+                options: {
+                    presets: ['es2015', 'react']
                 }
-            }
-        ]
-    }*///resolve: {
-        module: {
-            rules: [{
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                use: [{ 
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['es2015', 'react']
-                    }
-                }]
             }]
-        },
-        resolve: {
-            modules: [path.resolve(__dirname, './'), path.resolve(__dirname, "node_modules")],
-            extensions: ['.js', '.jsx']
-        }, // common extensions
-    //},
-    /*resolveLoader: {
-        extensions: ['.js', '.jsx'] // common extensions
-    },*/
+        }]
+    },
+    resolve: {
+        modules: [path.resolve(__dirname, './'), path.resolve(__dirname, "node_modules")],
+        extensions: ['.js', '.jsx']
+    },
     devServer: {
       inline: true,
       port: 8008,
@@ -74,34 +28,24 @@ const common = {
         //,"Access-Control-Allow-Credentials": "true"
       }
    }
-    // other plugins, postcss config etc. common for frontend and backend
 };
 
 const frontend = {
-     entry: [
-         './main.js'
-     ],
+     entry: ['./main.js'],
      output: {
         path:'/',
         filename: 'index.js',
-    },
-    externals: {
-        //punycode: './node_modules/punycode'
     }
-     // other loaders, plugins etc. specific for frontend
 };
 
 const backend = {
-     entry: [
-         './backend.js'
-     ],
+     entry: ['./backend.js'],
      output: {
-        path:'/', // added line here
+        path:'/',
         filename: 'backend_index.js',
     },
      target: 'node',
      externals: ['mysql']// specify for example node_modules to be not bundled
-     // other loaders, plugins etc. specific for backend
 };
 
 module.exports = [
