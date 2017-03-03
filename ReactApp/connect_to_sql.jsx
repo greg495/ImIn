@@ -11,16 +11,14 @@ class SQL extends React.Component {
         'message': 'hello world'
     };
 
-    fetch('http://localhost:8009', {
-      method: 'POST',
+    fetch('/api/connect', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      //mode: 'no-cors',
-      body: JSON.stringify(user)
+      }
     }).then(function(response) {
         console.log("from JSX:");
-        console.log(response);
+        console.log(response.text());
     });
   }
 
