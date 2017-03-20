@@ -2,7 +2,7 @@ var path = require('path');
 process.traceDeprecation = true;
 
 const common = {
-    entry: ['./main.js'],
+    entry: ['./src/main.js'],
     output: {
         path:'/',
         filename: 'index.js',
