@@ -10,10 +10,10 @@ var express = require('express');
 var app = express();
 var mysql = require("mysql");
 var config = {
-    host     : 'sql9.freemysqlhosting.net',
-    user     : 'sql9160186',
-    password : 'JJkkGAHcka',
-    database : 'sql9160186' 
+    host     : 'db4free.net',
+    user     : 'sddimin',
+    password : 'sddimin',
+    database : 'imin' 
 };
 var query = 'CREATE TABLE IF NOT EXISTS users ' +
             '(name VARCHAR(256), ' +
@@ -23,17 +23,23 @@ var query2 = 'INSERT INTO `users` VALUES ("John", 20, "M")';
 var query3 = 'SELECT * FROM `users`';
 
 app.get('/api/connect', function (req, response) {
+    var couldNotConnect = false;
     // set up connection
     var connection = mysql.createConnection(config);
     // connect to database
     connection.connect(function(err) {
         if (err) {
             console.log("could not connect to database");
-            return;
+            couldNotConnect = true;
         } else {
             console.log("connected to database");
         }
     });
+    if (couldNotConnect) {
+        console.log("got into special bracket");
+        response.end("could not connect to db");
+        return;
+    }
     // perform queries
     connection.query('SHOW TABLES', function(err, results, fields) {
     if (!err) {
