@@ -8,11 +8,13 @@
     width:30%;
     height:100%;
     float: right;
+    border: solid;
     border-color: blue;
 }
 #form {
     width:30%;
     height:100%;
     float: right;
+    border: solid;
     border-color: yellow;
 }
