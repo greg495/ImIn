@@ -63,7 +63,6 @@ function logout() {
 /* Function to show user information */
 function showLoggedIn() {
   // Set the text
-  document.getElementById('status').innerHTML = 'Logged in';
   document.getElementById('facebookButton').innerHTML = 'Log Out';
 
   // Make username and picture visible
@@ -80,7 +79,6 @@ function showLoggedIn() {
 /* Function to clear user information from screen */
 function showLoggedOut() {
   // Set the text
-  document.getElementById('status').innerHTML = 'Not logged in';
   document.getElementById('facebookButton').innerHTML = 'Log In';
 
   // Hide the username and profile picture
@@ -90,5 +88,12 @@ function showLoggedOut() {
 
 /* Add user to the database if this is first visit */
 function addUser() {
-  
+  FB.api('/me', {fields: 'name,first_name'}, function(response) {
+    $.getJSON('/api/addUser', 
+    {
+      fullName: response.name,
+      firstName: response.first_name,
+      id: response.id
+    },function(data) {});
+  });
 }
