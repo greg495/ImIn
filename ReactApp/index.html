@@ -12,27 +12,6 @@
    </head>
 
    <body>
-      <script>
-        window.fbAsyncInit = function() {
-          FB.init({
-            appId      : '274178513017639',
-            cookie     : true,
-            xfbml      : true,
-            version    : 'v2.8'
-          });
-          FB.AppEvents.logPageView();   
-          fbLoaded();
-        };
-
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-          }(document, 'script', 'facebook-jssdk'));
-      </script>
-
       <nav class="navbar navbar-default">
           <div class="container-fluid">
               <div class="navbar-header">
@@ -42,7 +21,6 @@
 
                 <div id="username">username </div>
                 <img src="" id="profile_picture" alt="profile_picture" style="width:50px;height:50px;">
-                <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" data-auto-logout-link="true"></div>
 
               </div>
           </div>
@@ -55,10 +33,9 @@
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
       <script src="bootstrap/js/bootstrap.min.js"></script>
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUB6UcR297wu7yC46x_4FTmoIbEY0DT_A&callback=myMap"></script>
+      <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUB6UcR297wu7yC46x_4FTmoIbEY0DT_A&callback=myMap"></script> -->
       <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
       <script src="index.js"></script>
       <!-- <script src="backend_index.js"></script> -->
-      <script src="src/js/facebookAPI.js"></script>
    </body>
 </html>
