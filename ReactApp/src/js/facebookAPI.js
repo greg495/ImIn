@@ -1,4 +1,5 @@
-
+// global variable to store the id of the user
+var facebookUserID;
 function fbLoaded() {
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
@@ -13,7 +14,7 @@ function getData() {
   FB.api('/me', function(response) {
       console.log(JSON.stringify(response));
       name = response["name"];
-      userid = response["id"];
+      facebookUserID = userid = response["id"];
       showData(name, userid);
   });
 }
