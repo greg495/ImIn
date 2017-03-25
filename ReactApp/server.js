@@ -21,11 +21,13 @@ var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
             'firstName VARCHAR(256)) ';
 var query2 = 'INSERT INTO `users` VALUES ("1234", "John Smith, "John")';
 var query3 = 'SELECT * FROM `users`';
+var connection = mysql.createConnection(config);
+
+// this helps with parsing the data sent from forms
+app.use(express.bodyParser());
 
 app.get('/api/connect', function (req, response) {
     var couldNotConnect = false;
-    // set up connection
-    var connection = mysql.createConnection(config);
     // connect to database
     connection.connect(function(err) {
         if (err) {
@@ -38,6 +40,7 @@ app.get('/api/connect', function (req, response) {
     if (couldNotConnect) {
         console.log("got into special bracket");
         response.end("could not connect to db");
+        connection.end();
         return;
     }
     // perform queries
@@ -88,7 +91,7 @@ app.get('/api/addUser', function (req, response) {
             console.log("connected to database");
         }
     });
-    
+
     // Handle if connection failed
     if (couldNotConnect) {
         console.log("got into special bracket");
@@ -125,6 +128,30 @@ app.get('/api/addUser', function (req, response) {
         console.log('Error searching database.');
     });
 
+    // close connection
+    connection.end();
+});
+
+app.post("/api/form", function(req, response) {
+    connection.connect(function(err) {
+        if (err) {
+            console.log("could not connect to database");
+        } else {
+            console.log("connected to database");
+        }
+    });
+    var gameTableCreation = `CREATE TABLE IF NOT EXISTS games
+                    (name VARCHAR(127),
+                     description TEXT,
+                     sport VARCHAR(127) NOT NULL,
+                     latitude FLOAT(6,10) NOT NULL,
+                     longitude FLOAT(6,10) NOT NULL,
+                     creatorID BIGINT(20) NOT NULL,
+                     gameID BIGINT NOT NULL AUTO_INCREMENT)`;
+    var gameInsertion = `INSERT INTO games VALUES (${req.body.eventName}, ${req.body.description}, ${req.body.sport}, ${req.body.latitude}, ${req.body.longitude}, ${req.body.creatorID})`;
+
+    // close connection
+    connection.end();
 });
 
 var server = app.listen(local_port, function () {
