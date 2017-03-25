@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 // import App from './App.jsx';
 // import SQL from './connect_to_sql.jsx';
 import Chat from './Chat.jsx';
-import Map from './Map.jsx';
+import Container from './Map.jsx';
 import Form from './Form.jsx';
 
 // ReactDOM.render(<App />, document.getElementById('app'));
 // ReactDOM.render(<SQL />, document.getElementById('sql'));
-ReactDOM.render(<Map />, document.getElementById('map'));
-ReactDOM.render(<Chat />, document.getElementById('chat'));
-ReactDOM.render(<Form />, document.getElementById('form'));
+ReactDOM.render(<Container />, document.getElementById('mapContainer'));
+ReactDOM.render(<Chat />, document.getElementById('chatContainer'));
+ReactDOM.render(<Form />, document.getElementById('formContainer'));
 
 var chat = $("#chat").detach();
 var form = null;
