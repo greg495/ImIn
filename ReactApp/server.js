@@ -10,10 +10,10 @@ var express = require('express');
 var app = express();
 var mysql = require("mysql");
 var config = {
-    host     : 'db4free.net',
-    user     : 'sddimin',
-    password : 'sddimin',
-    database : 'imin' 
+    host     : 'sql9.freemysqlhosting.net',
+    user     : 'sql9165711',
+    password : 'WACXWm7CRM',
+    database : 'sql9165711' 
 };
 var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
             '(id VARCHAR(256), ' +
