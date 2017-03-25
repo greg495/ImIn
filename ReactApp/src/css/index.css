@@ -1,17 +1,17 @@
-#map {
+#mapContainer {
     width:70%;
     height:100%;
     border: solid;
     border-color: black;
 }
-#chat {
+#chatContainer {
     width:30%;
     height:100%;
     float: right;
     border: solid;
     border-color: blue;
 }
-#form {
+#formContainer {
     width:30%;
     height:100%;
     float: right;
