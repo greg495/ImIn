@@ -7,6 +7,7 @@ database : 'sdd'*/
 // express version of app
 var local_port = 8009;
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var mysql = require("mysql");
 var config = {
@@ -24,7 +25,7 @@ var query3 = 'SELECT * FROM `users`';
 var connection = mysql.createConnection(config);
 
 // this helps with parsing the data sent from forms
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 app.get('/api/connect', function (req, response) {
     var couldNotConnect = false;
