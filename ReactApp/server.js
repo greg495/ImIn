@@ -16,67 +16,11 @@ var config = {
     password : 'WACXWm7CRM',
     database : 'sql9165711' 
 };
-var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
-            '(id VARCHAR(256), ' +
-            'fullName VARCHAR(256), ' +
-            'firstName VARCHAR(256)) ';
-var query2 = 'INSERT INTO `users` VALUES ("1234", "John Smith, "John")';
-var query3 = 'SELECT * FROM `users`';
+
 var connection = mysql.createConnection(config);
 
 // this helps with parsing the data sent from forms
 app.use(bodyParser.json());
-
-app.get('/api/connect', function (req, response) {
-    var couldNotConnect = false;
-    // connect to database
-    connection.connect(function(err) {
-        if (err) {
-            console.log("could not connect to database");
-            couldNotConnect = true;
-        } else {
-            console.log("connected to database");
-        }
-    });
-    if (couldNotConnect) {
-        console.log("got into special bracket");
-        response.end("could not connect to db");
-        connection.end();
-        return;
-    }
-    // perform queries
-    connection.query('SHOW TABLES', function(err, results, fields) {
-    if (!err) {
-        console.log('The tables are: ');
-        console.log(results);
-    } else
-        console.log('Error while showing tables.');
-    });
-    connection.query(createTableQuery, function(err, results, fields) {
-    if (!err) {
-        console.log('created table: ');
-        console.log(results);
-    } else
-        console.log('Error while making table.');
-    });
-    connection.query(query2, function(err, results, fields) {
-    if (!err) {
-        console.log('inserted user: ');
-        console.log(results);
-    } else
-        console.log('Error while inserting.');
-    });
-    connection.query(query3, function(err, results, fields) {
-    if (!err) {
-        console.log('The users are: ');
-        console.log(results);
-        response.end(JSON.stringify(results));
-    } else
-        console.log('Error while performing Query.');
-    });
-    // close connection
-    connection.end();
-});
 
 app.get('/api/addUser', function (req, response) {
     // Set up connection
@@ -101,6 +45,10 @@ app.get('/api/addUser', function (req, response) {
     }
 
     // Make sure user table exists
+    var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
+            '(id VARCHAR(256), ' +
+            'fullName VARCHAR(256), ' +
+            'firstName VARCHAR(256)) ';
     connection.query(createTableQuery, function(err, results, fields) {
     if (!err) {
     } else
@@ -116,10 +64,11 @@ app.get('/api/addUser', function (req, response) {
             // Add new user to the database
             var addUserQuery = 'INSERT INTO `users`(`id`, `fullName`, `firstName`) VALUES ("' + req.query.id + '", "' + req.query.fullName + '", "' + req.query.firstName + '")';
             connection.query(addUserQuery, function(err2, results2, fields2) {
-            if (!err2) {
-                console.log('User: ' + req.query.fullName + ' added to Database!');
-            } else
-                console.log('Error adding user!');
+                if (!err2) {
+                    console.log('User: ' + req.query.fullName + ' added to Database!');
+                } else {
+                    console.log('Error adding user!');
+                }
             });
 
         } else {
@@ -129,7 +78,7 @@ app.get('/api/addUser', function (req, response) {
         console.log('Error searching database.');
     });
 
-    // close connection
+    // Close connection
     connection.end();
 });
 
@@ -145,13 +94,51 @@ app.post("/api/form", function(req, response) {
                     (name VARCHAR(127),
                      description TEXT,
                      sport VARCHAR(127) NOT NULL,
-                     latitude FLOAT(6,10) NOT NULL,
-                     longitude FLOAT(6,10) NOT NULL,
+                     latitude VARCHAR(127) NOT NULL,
+                     longitude VARCHAR(127) NOT NULL,
                      creatorID BIGINT(20) NOT NULL,
-                     gameID BIGINT NOT NULL AUTO_INCREMENT)`;
+                     gameID BIGINT NOT NULL AUTO_INCREMENT,
+                     PRIMARY KEY(gameID) )`;
     var gameInsertion = `INSERT INTO games VALUES (${req.body.eventName}, ${req.body.description}, ${req.body.sport}, ${req.body.latitude}, ${req.body.longitude}, ${req.body.creatorID})`;
 
-    // close connection
+    // Close connection
+    connection.end();
+});
+
+app.get('/api/getGames', function (req, response) {
+    // Set up connection
+    var couldNotConnect = false;
+    var connection = mysql.createConnection(config);
+    
+    // Connect to database
+    connection.connect(function(err) {
+        if (err) {
+            console.log("could not connect to database");
+            couldNotConnect = true;
+        } else {
+            console.log("connected to database");
+        }
+    });
+
+    // Handle if connection failed
+    if (couldNotConnect) {
+        console.log("got into special bracket");
+        response.end("could not connect to db");
+        return;
+    }
+    
+    // Get all the games
+    var getGamesQuery = 'SELECT * FROM `games`';
+    connection.query(getGamesQuery, function(err, results, fields) {
+        if (!err) {
+            response.send( JSON.stringify(results) );
+            console.log("Sent game information.")
+        } else {
+            console.log('Error searching database.');
+        }
+    });
+    
+    // Close connection
     connection.end();
 });
 
