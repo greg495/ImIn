@@ -6,31 +6,32 @@ export class Container extends React.Component {
         super(props);
         this.state = {
             markers: [],
-            currentLocation : {lat:42, lng:-73}
+            currentLoc : {lat:42.7284, lng:-73.6918}
         };
     }
 
     componentDidMount() {
-        // $.getJSON('/api/getGames', {}, (data) => {
-        //     this.setState({
-        //         markers : data
-        //     });
-        // });
-
-        if (navigator && navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(pos) {
+         $.getJSON('/api/getGames', {}, (data) => {
+             this.setState({
+                 markers : data
+             });
+         });
+        /*if (navigator && navigator.geolocation) {
+            console.log("start of geolocation");
+            navigator.geolocation.getCurrentPosition((pos) => {
+                console.log("inside of geolocation");
                 const coords = pos.coords;
                 console.log(coords);
                 this.setState({
-                    currentLocation: {
+                    currentLoc: {
                         lat: coords.latitude,
                         lng: coords.longitude
                     }
                 })
             })
             console.log("HERE");
-            // console.log(this.state.currentLocation);
-        }
+            // console.log(this.state.currentLoc);
+        }*/
 
     }
     render() {
@@ -44,7 +45,7 @@ export class Container extends React.Component {
         }
         // console.log(markers);
         return (
-            <Map google={this.props.google} style={style} mapCenter={this.state.currentLocation}>
+            <Map google={this.props.google} style={style} initialCenter={this.state.currentLoc}>
                 {this.state.markers.map(function(marker, index){
                     return <Marker name={marker.name} position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}} key={index} />
                 })}
@@ -52,7 +53,11 @@ export class Container extends React.Component {
         );
     }
 }
+/*{this.state.markers.map(function(marker, index){
+                    return <Marker name={marker.name} position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}} key={index} />
+                })}*/
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyAsA8dWaWu4HzipdUVUTgWGm_8xF8lGiWA"
+  apiKey: "AIzaSyAsA8dWaWu4HzipdUVUTgWGm_8xF8lGiWA",
+  version: 3.26
 })(Container);
