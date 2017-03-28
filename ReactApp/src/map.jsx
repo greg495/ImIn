@@ -2,19 +2,36 @@ import React from 'react';
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
 export class Container extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            markers: [
+                {
+                    name:'SOMA',
+                    position:{lat: 37.778519, lng: -122.405640}
+                }],
+        };
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            /*Container.prototype.setState({markers : [
+                {
+                    name:"Dolores park",
+                    position:{lat: 37.759703, lng: -122.428093}
+                }
+            ]});*/
+            this.setState({
+                    markers : [{
+                    name:"Dolores park",
+                    position:{lat: 37.759703, lng: -122.428093}
+                }]
+            });
+            console.log("changed");
+        }, 5000);
+    }
     render() {
-        // markers.push(//) = [
-        //     {
-        //         name: 'SOMA',
-        //         position: {lat: 37.778519, lng: -122.405640}
-        //     });
-        var markers = [];
-        // markers.push( {name:'asdf', position: {lat: 37.759703, lng: -122.44093}});
-        $.getJSON('/api/getGames', {}, function(data) {
-            markers.push( {name:data[0]['sport'], position: {lat: 37.759703, lng: -122.44093}});
-        });
-
-
+        //markers={[{name:"some",position:{lat: 37.778519, lng: -122.405640}}]}
         const style = {
             width: '70%',
             height: '100%'
@@ -22,11 +39,11 @@ export class Container extends React.Component {
         if (!this.props.loaded) {
             return <div>Loading...</div>
         }
-        console.log(markers);
+        // console.log(markers);
         return (
-            <Map google={this.props.google} style={style}>
-                {markers.map(function(marker, index){
-                    return <Marker name={marker.name} position={marker.position} />
+            <Map google={this.props.google} style={style} >
+                {this.state.markers.map(function(marker, index){
+                    return <Marker name={marker.name} position={marker.position} key={index} />
                 })}
             </Map>
         );
