@@ -1,8 +1,18 @@
 import React from 'react';
-import { Map, GoogleApiWrapper } from 'google-maps-react';
+import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
 export class Container extends React.Component {
     render() {
+        const markers = [
+            {
+                name: 'SOMA',
+                position: {lat: 37.778519, lng: -122.405640}
+            },
+            {
+                name: 'Dolores park',
+                position: {lat: 37.759703, lng: -122.428093}
+            }
+        ]
         const style = {
             width: '70%',
             height: '100%'
@@ -11,7 +21,11 @@ export class Container extends React.Component {
             return <div>Loading...</div>
         }
         return (
-            <Map google={this.props.google} style={style}/>
+            <Map google={this.props.google} style={style}>
+                {markers.map(function(marker, index){
+                    return <Marker name={marker.name} position={marker.position} />
+                })}
+            </Map>
         );
     }
 }
