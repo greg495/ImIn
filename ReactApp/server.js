@@ -94,8 +94,8 @@ app.post("/api/form", function(req, response) {
                     (name VARCHAR(127),
                      description TEXT,
                      sport VARCHAR(127) NOT NULL,
-                     latitude FLOAT(10,10) NOT NULL,
-                     longitude FLOAT(10,10) NOT NULL,
+                     latitude VARCHAR(127) NOT NULL,
+                     longitude VARCHAR(127) NOT NULL,
                      creatorID BIGINT(20) NOT NULL,
                      gameID BIGINT NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY(gameID) )`;
