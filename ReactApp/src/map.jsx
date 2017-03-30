@@ -18,11 +18,13 @@ export class Container extends React.Component {
     }
 
     componentDidMount() {
-         $.getJSON('/api/getGames', {}, (data) => {
-             this.setState({
-                 markers: data
-             });
-         });
+        // when the map is mounted, grab the games from the database and pin them to the map
+        $.getJSON('/api/getGames', {}, (data) => {
+            this.setState({
+                markers: data
+            });
+        });
+        // set the position of the map to the user's current location
         if (navigator && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const coords = pos.coords;
@@ -37,10 +39,13 @@ export class Container extends React.Component {
     }
 
     addMarker(mapProps, map, clickEvent) {
+        // remove any InfoWindow when the map is clicked on
         this.setState({
             showInfoWindow: false
         });
+        // if the toggle for adding markers is false, don't do anything
         if (!window.toggle) return;
+        // update the position of the marker added and the state for the component
         window.createdMarkerPosition = {lat: clickEvent.latLng.lat(), lng: clickEvent.latLng.lng()};
         this.setState({
             markers: [{name: "Current Location", latitude: window.createdMarkerPosition.lat, longitude: window.createdMarkerPosition.lng}]
@@ -57,6 +62,7 @@ export class Container extends React.Component {
     }
 
     isEqual(marker1, marker2) {
+        // return a boolean on if to show an InfoWindow for a marker
         if(this.state.showInfoWindow === false || "undefined" === typeof marker2 || Object.keys(marker2).length === 0 || 
             !(marker1.position.lat() === marker2.position.lat() && marker1.position.lng() === marker2.position.lng())){
             return true;
@@ -69,17 +75,29 @@ export class Container extends React.Component {
             width: '60%',
             height: '100%'
         }
+
         if (!this.props.loaded) {
             return <div>Loading...</div>
         }
+
         return (
-            <Map google={this.props.google} containerStyle={{width: "60%", height: "100%"}} style={{width: "100%", height: "100%"}} initialCenter={this.state.currentLoc} onClick={this.addMarker}>
+            <Map google={this.props.google}
+                 containerStyle={{width: "70%", height: "100%"}}
+                 style={{width: "100%", height: "100%"}}
+                 initialCenter={this.state.currentLoc}
+                 onClick={this.addMarker}>
+
                 {this.state.markers.map((marker, index) => {
-                    return <Marker name={marker.name} position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}} onClick={this.onMarkerClick} key={index} />
+                    return <Marker name={marker.name}
+                                   position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}}
+                                   onClick={this.onMarkerClick}
+                                   key={index} />
                 })}
+
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showInfoWindow}>
                     <div><h1>{this.state.selectedPlace.name}</h1></div>
                 </InfoWindow>
+
             </Map>
         );
     }
