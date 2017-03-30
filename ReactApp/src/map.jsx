@@ -6,7 +6,7 @@ export class Container extends React.Component {
         super(props);
         this.state = {
             markers: [],
-            currentLoc : {lat:42, lng:-73},
+            currentLoc : {lat:42.73018076004365, lng:-73.67882251739502},
             showInfoWindow: false,
             activeMarker: {},
             selectedPlace: {}
