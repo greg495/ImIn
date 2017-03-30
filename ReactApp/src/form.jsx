@@ -15,11 +15,11 @@ class Form extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.toggleAddMarker = this.toggleAddMarker.bind(this);
-        this.postLatLng = this.postLatLng.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
+        this.validateForm = this.validateForm.bind(this);
     }
 
     handleInputChange(event) {
+        // function to handle when a user updates an input field on the form
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
@@ -30,13 +30,17 @@ class Form extends React.Component {
     }
 
     toggleAddMarker(event) {
+        // update the button value on if a user is able ot add a marker to the map or not
         window.toggle = !window.toggle;
         this.setState({
             markerAddingButton: window.toggle ? "Click to interact with the map again" : "Click to place marker on map"
         });
     }
 
-    postLatLng(e) {
+    validateForm(e) {
+        // function to validate the form on submission
+        // e.g. an event name and location for event is required
+        // then the data is sent to the server and the game is saved
         e.preventDefault();
         this.setState({
             latitude: window.createdMarkerPosition.lat,
@@ -56,7 +60,7 @@ class Form extends React.Component {
 
     render() {
         return (
-            <form id="form" action="/api/form" method="post" encType="multipart/form-data" onSubmit={this.postLatLng}>
+            <form id="form" action="/api/form" method="post" encType="multipart/form-data" onSubmit={this.validateForm}>
                 Event Name: <input type="text" name="eventName" placeholder="Event name..." value={this.state.eventName} onChange={this.handleInputChange} required></input>
                 <input type="textarea" name="description" rows="4" cols="20" placeholder="Enter a description for the event if you want." value={this.state.description} onChange={this.handleInputChange}></input>
                 <select name="sport" value={this.state.sport} onChange={this.handleInputChange} required>
