@@ -1,59 +1,43 @@
-//old database information
-/*host     : 'http://kennethwschmittcom.ipagemysql.com',
-user     : 'sdd',
-password : 'sddimin',
-database : 'sdd'*/
-
-// express version of app
-var local_port = 8009;
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var mysql = require("mysql");
+
+var local_port = 8009;
 var config = {
     host     : 'sql9.freemysqlhosting.net',
     user     : 'sql9165711',
     password : 'WACXWm7CRM',
     database : 'sql9165711' 
 };
-
 var connection = mysql.createConnection(config);
+connection.connect(function(err) {
+    if (err) {
+        console.log("could not connect to database");
+        couldNotConnect = true;
+    } else {
+        console.log("connected to database");
+    }
+});
 
 // this helps with parsing the data sent from forms
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.get('/api/addUser', function (req, response) {
-    // Set up connection
-    var couldNotConnect = false;
-    var connection = mysql.createConnection(config);
-    
-    // Connect to database
-    connection.connect(function(err) {
-        if (err) {
-            console.log("could not connect to database");
-            couldNotConnect = true;
-        } else {
-            console.log("connected to database");
-        }
-    });
-
-    // Handle if connection failed
-    if (couldNotConnect) {
-        console.log("got into special bracket");
-        response.end("could not connect to db");
-        return;
-    }
-
     // Make sure user table exists
     var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
             '(id VARCHAR(256), ' +
             'fullName VARCHAR(256), ' +
             'firstName VARCHAR(256)) ';
     connection.query(createTableQuery, function(err, results, fields) {
-    if (!err) {
-    } else
-        console.log('Error while making table.');
-    });
+        if (!err) {
+        } else
+            console.log('Error while making table.');
+        }
+    );
 
     // See if ID is in database
     var findIdQuery = 'SELECT * FROM `users` WHERE id="'+req.query.id+'"';
@@ -78,18 +62,10 @@ app.get('/api/addUser', function (req, response) {
         console.log('Error searching database.');
     });
 
-    // Close connection
-    connection.end();
+    response.end();
 });
 
 app.post("/api/form", function(req, response) {
-    connection.connect(function(err) {
-        if (err) {
-            console.log("could not connect to database");
-        } else {
-            console.log("connected to database");
-        }
-    });
     var gameTableCreation = `CREATE TABLE IF NOT EXISTS games
                     (name VARCHAR(127),
                      description TEXT,
@@ -99,34 +75,27 @@ app.post("/api/form", function(req, response) {
                      creatorID BIGINT(20) NOT NULL,
                      gameID BIGINT NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY(gameID) )`;
-    var gameInsertion = `INSERT INTO games VALUES (${req.body.eventName}, ${req.body.description}, ${req.body.sport}, ${req.body.latitude}, ${req.body.longitude}, ${req.body.creatorID})`;
+    var gameInsertion = `INSERT INTO games (name, description, sport, latitude, longitude, creatorID) VALUES ('${req.body.eventName}', '${req.body.description}', '${req.body.sport}', '${req.body.latitude}', '${req.body.longitude}', '${req.body.creatorID}')`;
 
-    // Close connection
-    connection.end();
+    connection.query(gameTableCreation, function(err, results, fields) {
+        if (!err) {
+            console.log("table was either made fine or already created");
+        } else
+            console.log('Error while making table.');
+        }
+    );
+    connection.query(gameInsertion, function(err, results, fields) {
+        if (!err) {
+            console.log("made query successfully");
+        } else
+            console.log('Error while performing game adding query.');
+        }
+    );
+
+    response.send({ redirect: "http://localhost:8008"});
 });
 
-app.get('/api/getGames', function (req, response) {
-    // Set up connection
-    var couldNotConnect = false;
-    var connection = mysql.createConnection(config);
-    
-    // Connect to database
-    connection.connect(function(err) {
-        if (err) {
-            console.log("could not connect to database");
-            couldNotConnect = true;
-        } else {
-            console.log("connected to database");
-        }
-    });
-
-    // Handle if connection failed
-    if (couldNotConnect) {
-        console.log("got into special bracket");
-        response.end("could not connect to db");
-        return;
-    }
-    
+app.get('/api/getGames', function (req, response) {    
     // Get all the games
     var getGamesQuery = 'SELECT * FROM `games`';
     connection.query(getGamesQuery, function(err, results, fields) {
@@ -137,9 +106,6 @@ app.get('/api/getGames', function (req, response) {
             console.log('Error searching database.');
         }
     });
-    
-    // Close connection
-    connection.end();
 });
 
 var server = app.listen(local_port, function () {

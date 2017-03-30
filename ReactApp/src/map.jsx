@@ -5,45 +5,53 @@ export class Container extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            markers: [
-                {
-                    name:'SOMA',
-                    position:{lat: 37.778519, lng: -122.405640}
-                }],
+            markers: [],
+            currentLoc : {lat:42, lng:-73}
         };
+
+        this.addMarker = this.addMarker.bind(this);
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            /*Container.prototype.setState({markers : [
-                {
-                    name:"Dolores park",
-                    position:{lat: 37.759703, lng: -122.428093}
-                }
-            ]});*/
-            this.setState({
-                    markers : [{
-                    name:"Dolores park",
-                    position:{lat: 37.759703, lng: -122.428093}
-                }]
+         $.getJSON('/api/getGames', {}, (data) => {
+             this.setState({
+                 markers: data
+             });
+         });
+        if (navigator && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const coords = pos.coords;
+                this.setState({
+                    currentLoc: {
+                        lat: coords.latitude,
+                        lng: coords.longitude
+                    }
+                });
             });
-            console.log("changed");
-        }, 5000);
+        };
+    }
+
+    addMarker(mapProps, map, clickEvent) {
+        if (!window.toggle) return;
+        window.createdMarkerPosition = {lat: clickEvent.latLng.lat(), lng: clickEvent.latLng.lng()};
+        this.setState({
+            markers: [{name: "Current Location", latitude: window.createdMarkerPosition.lat, longitude: window.createdMarkerPosition.lng}]
+        });
+        console.log("should have added marker");
     }
     render() {
         //markers={[{name:"some",position:{lat: 37.778519, lng: -122.405640}}]}
         const style = {
-            width: '70%',
+            width: '60%',
             height: '100%'
         }
         if (!this.props.loaded) {
             return <div>Loading...</div>
         }
-        // console.log(markers);
         return (
-            <Map google={this.props.google} style={style} >
+            <Map google={this.props.google} containerStyle={{width: "60%", height: "100%"}} style={{width: "100%", height: "100%"}} initialCenter={this.state.currentLoc} onClick={this.addMarker}>
                 {this.state.markers.map(function(marker, index){
-                    return <Marker name={marker.name} position={marker.position} key={index} />
+                    return <Marker name={marker.name} position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}} key={index} />
                 })}
             </Map>
         );
@@ -51,5 +59,6 @@ export class Container extends React.Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyAsA8dWaWu4HzipdUVUTgWGm_8xF8lGiWA"
+  apiKey: "AIzaSyAsA8dWaWu4HzipdUVUTgWGm_8xF8lGiWA",
+  version: 3.26
 })(Container);
