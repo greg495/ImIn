@@ -1,19 +1,14 @@
 #mapContainer {
     width:70%;
     height:100%;
-    border-color: black;
 }
 #chatContainer {
     width:30%;
     height:100%;
     float: right;
-    border: solid;
-    border-color: blue;
 }
 #formContainer {
     width:30%;
     height:100%;
     float: right;
-    border: solid;
-    border-color: yellow;
 }
