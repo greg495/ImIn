@@ -1,22 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import App from './App.jsx';
-// import SQL from './connect_to_sql.jsx';
-import Chat from './Chat.jsx';
-import Container from './Map.jsx';
-import Form from './Form.jsx';
+import Chat from './chat.jsx';
+import Container from './map.jsx';
+import Form from './form.jsx';
 
-// ReactDOM.render(<App />, document.getElementById('app'));
-// ReactDOM.render(<SQL />, document.getElementById('sql'));
-        // markers.push( {name:'asdf', position: {lat: 37.759703, lng: -122.44093}});
-        /*$.getJSON('/api/getGames', {}, function(data) {
-            markers.push( {name:data[0]['sport'], position: {lat: 37.759703, lng: -122.44093}});
-        });*/
+window.toggle = false;
+window.createdMarkerPosition = {lat: 0, lng: 0};
 ReactDOM.render(<Container />, document.getElementById('mapContainer'));
 ReactDOM.render(<Chat />, document.getElementById('chatContainer'));
 ReactDOM.render(<Form />, document.getElementById('formContainer'));
 
-var chat = $("#chat").detach();
+var chat = $("#chatContainer").detach();
 var form = null;
 
 /*(navigator.geolocation.getCurrentPosition(function (position) {
