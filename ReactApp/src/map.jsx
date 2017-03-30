@@ -6,17 +6,18 @@ export class Container extends React.Component {
         super(props);
         this.state = {
             markers: [],
-            currentLoc : {lat:42.7284, lng:-73.6918}
+            currentLoc : {lat:42, lng:-73}
         };
+
+        this.addMarker = this.addMarker.bind(this);
     }
 
     componentDidMount() {
-        $.getJSON('/api/getGames', {}, (data) => {
-            this.setState({
-                markers : data
-            });
-        });
-
+         $.getJSON('/api/getGames', {}, (data) => {
+             this.setState({
+                 markers: data
+             });
+         });
         if (navigator && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos) => {
                 const coords = pos.coords;
@@ -26,21 +27,29 @@ export class Container extends React.Component {
                         lng: coords.longitude
                     }
                 });
-            })
-        }
+            });
+        };
+    }
 
+    addMarker(mapProps, map, clickEvent) {
+        if (!window.toggle) return;
+        window.createdMarkerPosition = {lat: clickEvent.latLng.lat(), lng: clickEvent.latLng.lng()};
+        this.setState({
+            markers: [{name: "Current Location", latitude: window.createdMarkerPosition.lat, longitude: window.createdMarkerPosition.lng}]
+        });
+        console.log("should have added marker");
     }
     render() {
+        //markers={[{name:"some",position:{lat: 37.778519, lng: -122.405640}}]}
         const style = {
-            width: '70%',
+            width: '60%',
             height: '100%'
         }
         if (!this.props.loaded) {
             return <div>Loading...</div>
         }
-       
         return (
-            <Map google={this.props.google} style={style} initialCenter={this.state.currentLoc}>
+            <Map google={this.props.google} containerStyle={{width: "60%", height: "100%"}} style={{width: "100%", height: "100%"}} initialCenter={this.state.currentLoc} onClick={this.addMarker}>
                 {this.state.markers.map(function(marker, index){
                     return <Marker name={marker.name} position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}} key={index} />
                 })}
