@@ -59,6 +59,8 @@ export class Container extends React.Component {
             activeMarker: marker,
             showInfoWindow: this.isEqual(marker, this.state.activeMarker)
         });
+        
+        showGameDetails(markerProps.name);
     }
 
     isEqual(marker1, marker2) {
@@ -88,7 +90,7 @@ export class Container extends React.Component {
                  onClick={this.addMarker}>
 
                 {this.state.markers.map((marker, index) => {
-                    return <Marker name={marker.name}
+                    return <Marker name={marker.gameID}
                                    position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}}
                                    onClick={this.onMarkerClick}
                                    key={index} />
