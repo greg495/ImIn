@@ -98,6 +98,23 @@ app.post("/api/form", function(req, response) {
 app.get('/api/getGames', function (req, response) {    
     // Get all the games
     var getGamesQuery = 'SELECT * FROM `games`';
+
+/* Function to get the details for a specific game */
+app.get('/api/getGameDetails', function (req, response) {    
+    // Create the query
+    var getGamesQuery = 'SELECT * FROM `games` WHERE gameID="'+req.query.ID+'"';
+
+    // Run the query
+    connection.query(getGamesQuery, function(err, results, fields) {
+        if (!err) {
+            response.send( JSON.stringify(results) );
+            console.log('Sent game details.')
+        } else {
+            console.log('Error searching database.');
+        }
+    });
+});
+
 /* Function to add user to a specific game */
 app.post("/api/imin", function(req, response) {
     // Create the queries
