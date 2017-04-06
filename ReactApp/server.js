@@ -98,6 +98,21 @@ app.post("/api/form", function(req, response) {
 app.get('/api/getGames', function (req, response) {    
     // Get all the games
     var getGamesQuery = 'SELECT * FROM `games`';
+/* Function to remove a user from a specific game */
+app.post("/api/leaveGame", function(req, response) {
+    // Create the query
+    var removal = 'DELETE FROM `attending` WHERE gameID="'+req.body.gameID+'" AND userID="'+req.body.userID+'"';
+    
+    // Run the query
+    connection.query(removal, function(err, results, fields) {
+        if (!err) {
+            console.log("User was successfuly removed from game.");
+        } else {
+            console.log('Error while removing player from game.');
+        }
+    });
+});
+
 /* Function to get all users attending a game */
 app.get('/api/getUsersAttending', function (req, response) {    
     // Create query
