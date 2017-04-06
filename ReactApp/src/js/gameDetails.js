@@ -52,3 +52,33 @@ function showGameDetails(gameID) {
 		addButton(gameID);
 	});
 }
+
+/* Function to display button on the game detail form */
+function addButton(gameID) {
+	// Get user info
+	FB.api('/me', {fields: 'name,first_name'}, function(response) {
+		$.getJSON('/api/getUserInGame', 
+	    {
+	      gameID: gameID,
+	      userID: response.id
+	    },function(data) {
+	    	// Make the im in button
+			var button = document.createElement("button");
+	    	
+	    	// See if the user is already in the game
+	    	if ( data.length == 0 ) {
+	    		button.innerHTML = "I'm In!";
+				button.addEventListener('click', function(){ imin(gameID); });
+	    	}else{
+	    		button.innerHTML = "Leave Game";
+				button.addEventListener('click', function(){ leaveGame(gameID); });
+	    	}
+
+	    	// Add the button to the page
+	    	detailContainer.appendChild(button);
+
+	    	// Add the list of palyers
+	    	addPlayerList(gameID);
+	    });
+	});
+}
