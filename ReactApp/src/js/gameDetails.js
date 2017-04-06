@@ -69,9 +69,11 @@ function addButton(gameID) {
 	    	if ( data.length == 0 ) {
 	    		button.innerHTML = "I'm In!";
 				button.addEventListener('click', function(){ imin(gameID); });
+				button.id = "iminButton";
 	    	}else{
 	    		button.innerHTML = "Leave Game";
 				button.addEventListener('click', function(){ leaveGame(gameID); });
+				button.id = "leaveGameButton";
 	    	}
 
 	    	// Add the button to the page
