@@ -1,8 +1,10 @@
+// Set up server
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var mysql = require("mysql");
 
+// Set connection details
 var local_port = 8009;
 var config = {
     host     : 'sql9.freemysqlhosting.net',
@@ -10,6 +12,8 @@ var config = {
     password : 'WACXWm7CRM',
     database : 'sql9165711' 
 };
+
+// Connect to database
 var connection = mysql.createConnection(config);
 connection.connect(function(err) {
     if (err) {
@@ -20,12 +24,13 @@ connection.connect(function(err) {
     }
 });
 
-// this helps with parsing the data sent from forms
+// This helps with parsing the data sent from forms
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+/* Function to add a new user to the database */
 app.get('/api/addUser', function (req, response) {
     // Make sure user table exists
     var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
@@ -39,7 +44,7 @@ app.get('/api/addUser', function (req, response) {
         }
     );
 
-    // See if ID is in database
+    // See if ID is already in database
     var findIdQuery = 'SELECT * FROM `users` WHERE id="'+req.query.id+'"';
     connection.query(findIdQuery, function(err, results, fields) {
     if (!err) {
@@ -65,7 +70,9 @@ app.get('/api/addUser', function (req, response) {
     response.end();
 });
 
+/* Function to add a new game to the database */
 app.post("/api/form", function(req, response) {
+    // Create the database queries
     var gameTableCreation = `CREATE TABLE IF NOT EXISTS games
                     (name VARCHAR(127),
                      description TEXT,
@@ -77,16 +84,19 @@ app.post("/api/form", function(req, response) {
                      PRIMARY KEY(gameID) )`;
     var gameInsertion = `INSERT INTO games (name, description, sport, latitude, longitude, creatorID) VALUES ('${req.body.eventName}', '${req.body.description}', '${req.body.sport}', '${req.body.latitude}', '${req.body.longitude}', '${req.body.creatorID}')`;
 
+    // Create the table, if needed
     connection.query(gameTableCreation, function(err, results, fields) {
         if (!err) {
-            console.log("table was either made fine or already created");
+            console.log("Table was either made fine or already created");
         } else
             console.log('Error while making table.');
         }
     );
+
+    // Add the game to the table
     connection.query(gameInsertion, function(err, results, fields) {
         if (!err) {
-            console.log("made query successfully");
+            console.log("Game successfully added");
         } else
             console.log('Error while performing game adding query.');
         }
@@ -185,10 +195,17 @@ app.get('/api/getUsersAttending', function (req, response) {
         }
     });
 });
+
+/* Function to see if a user is attending a specific game */
+app.get('/api/getUserInGame', function (req, response) {    
+    // Create the query
+    var getGamesQuery = 'SELECT * FROM `attending` WHERE gameID="'+req.query.gameID+'" AND userID="'+req.query.userID+'"';
+    
+    // Run the query
     connection.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
-            console.log("Sent game information.")
+            console.log("Sent response.")
         } else {
             console.log('Error searching database.');
         }
