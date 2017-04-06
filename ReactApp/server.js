@@ -95,9 +95,21 @@ app.post("/api/form", function(req, response) {
     response.send({ redirect: "http://localhost:8008"});
 });
 
+/* Function to get a list of all games in the database */
 app.get('/api/getGames', function (req, response) {    
-    // Get all the games
+    // Create the query
     var getGamesQuery = 'SELECT * FROM `games`';
+
+    // Run the query
+    connection.query(getGamesQuery, function(err, results, fields) {
+        if (!err) {
+            response.send( JSON.stringify(results) );
+            console.log('Sent list of all games.')
+        } else {
+            console.log('Error searching database.');
+        }
+    });
+});
 
 /* Function to get the details for a specific game */
 app.get('/api/getGameDetails', function (req, response) {    
