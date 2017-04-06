@@ -82,3 +82,30 @@ function addButton(gameID) {
 	    });
 	});
 }
+
+/* Function to display a list of players attending the game */
+function addPlayerList(gameID) {
+	$.getJSON('/api/getUsersAttending', 
+    {
+      ID: gameID
+    },function(data) {
+    	// Make a table of users
+    	var userTable = document.createElement("table");
+    	var firstRow = userTable.insertRow(0);
+    	firstRow.innerHTML = "Players:";
+
+    	// Add a row for every user
+    	data.forEach(function(element) {
+    		var row = userTable.insertRow(-1);
+    		var cell1 = row.insertCell(0);
+    		var cell2 = row.insertCell(1);
+    		cell2.innerHTML = element.name;
+    		var img = document.createElement('img');
+    		img.src = 'https://graph.facebook.com/'+element.userID+'/picture';
+    		cell1.appendChild(img);
+    	});
+
+    	// Add the table to the game detail form
+    	detailContainer.appendChild(userTable);
+    });
+}
