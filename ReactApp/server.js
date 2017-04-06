@@ -98,6 +98,21 @@ app.post("/api/form", function(req, response) {
 app.get('/api/getGames', function (req, response) {    
     // Get all the games
     var getGamesQuery = 'SELECT * FROM `games`';
+/* Function to get all users attending a game */
+app.get('/api/getUsersAttending', function (req, response) {    
+    // Create query
+    var getGamesQuery = 'SELECT * FROM `attending` WHERE gameID="'+req.query.ID+'"';
+    
+    // Run query
+    connection.query(getGamesQuery, function(err, results, fields) {
+        if (!err) {
+            response.send( JSON.stringify(results) );
+            console.log('Sent list of users attending game.')
+        } else {
+            console.log('Error searching database.');
+        }
+    });
+});
     connection.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
