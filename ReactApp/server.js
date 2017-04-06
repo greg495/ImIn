@@ -98,6 +98,34 @@ app.post("/api/form", function(req, response) {
 app.get('/api/getGames', function (req, response) {    
     // Get all the games
     var getGamesQuery = 'SELECT * FROM `games`';
+/* Function to add user to a specific game */
+app.post("/api/imin", function(req, response) {
+    // Create the queries
+    var tableCreation = `CREATE TABLE IF NOT EXISTS attending
+                (gameID BIGINT(20) NOT NULL,
+                 userID BIGINT(20) NOT NULL,
+                 name VARCHAR(127) NOT NULL )`;
+    var insertion = `INSERT INTO attending (gameID, userID, name) VALUES ('${req.body.gameID}', '${req.body.userID}', '${req.body.name}' )`;
+
+    // Make the table if needed
+    connection.query(tableCreation, function(err, results, fields) {
+        if (!err) {
+            console.log('Table was either made fine or already created.');
+        } else {
+            console.log('Error while making table.');
+        }
+    });
+
+    // Add user to the game
+    connection.query(insertion, function(err, results, fields) {
+        if (!err) {
+            console.log('User is attending game.');
+        } else {
+            console.log('Error while performing user attending game query.');
+        }
+    });
+});
+
 /* Function to remove a user from a specific game */
 app.post("/api/leaveGame", function(req, response) {
     // Create the query
