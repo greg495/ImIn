@@ -4,11 +4,20 @@
 }
 #chatContainer {
     width:30%;
-    height:100%;
-    float: right;
+   
+
 }
 #formContainer {
     width:30%;
-    height:100%;
-    float: right;
+   	margin:auto;
+
+}
+#detailContainer {
+	
+	margin:auto;
+	border-style:solid;
+}
+#wrapper { 
+	width:30%;
+	float:right;
 }
