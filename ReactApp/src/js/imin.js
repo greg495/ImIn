@@ -13,3 +13,19 @@ function imin(gameID){
 		showGameDetails(gameID);
 	});
 }
+
+/* Function to remove current user from game, gameID */
+function leaveGame(gameID){
+	// Get the user ID and name
+	FB.api('/me', {fields: 'name,first_name'}, function(response) {
+		// Remove user from the game in the database
+		$.post("/api/leaveGame", {
+			gameID: gameID,
+			userID: response.id,
+			name: response.name
+		}, function(data){});
+
+		// Reload form
+		showGameDetails(gameID);
+	});
+}
