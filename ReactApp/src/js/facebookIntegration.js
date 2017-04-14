@@ -70,8 +70,8 @@ function showLoggedIn() {
   document.getElementById('profilePicture').style.display = 'block';
 
   // Set the username and profile picture
-  FB.api('/me', {fields: 'first_name'}, function(response) {
-    document.getElementById('username').innerHTML = response.first_name;
+  FB.api('/me', {fields: 'name,first_name'}, function(response) {
+    document.getElementById('username').innerHTML = response.name;
     document.getElementById('profilePicture').src = "https://graph.facebook.com/"+response.id+"/picture";
   });
 }
