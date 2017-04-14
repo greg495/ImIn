@@ -74,15 +74,17 @@ app.get('/api/addUser', function (req, response) {
 app.post("/api/form", function(req, response) {
     // Create the database queries
     var gameTableCreation = `CREATE TABLE IF NOT EXISTS games
-                    (name VARCHAR(127),
+                    (time VARCHAR(127),
+                     date VARCHAR(127),
                      description TEXT,
                      sport VARCHAR(127) NOT NULL,
                      latitude VARCHAR(127) NOT NULL,
                      longitude VARCHAR(127) NOT NULL,
                      creatorID BIGINT(20) NOT NULL,
+                     creatorName VARCHAR(127),
                      gameID BIGINT NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY(gameID) )`;
-    var gameInsertion = `INSERT INTO games (name, description, sport, latitude, longitude, creatorID) VALUES ('${req.body.eventName}', '${req.body.description}', '${req.body.sport}', '${req.body.latitude}', '${req.body.longitude}', '${req.body.creatorID}')`;
+    var gameInsertion = `INSERT INTO games (time, date, description, sport, latitude, longitude, creatorID, creatorName) VALUES ('${req.body.time}', '${req.body.date}', '${req.body.description}', '${req.body.sport}', '${req.body.latitude}', '${req.body.longitude}', '${req.body.creatorID}', '${req.body.creatorName}')`;
 
     // Create the table, if needed
     connection.query(gameTableCreation, function(err, results, fields) {
@@ -97,12 +99,11 @@ app.post("/api/form", function(req, response) {
     connection.query(gameInsertion, function(err, results, fields) {
         if (!err) {
             console.log("Game successfully added");
+            response.send({ redirect: "http://localhost:8008", gameID: results['insertId']});
         } else
             console.log('Error while performing game adding query.');
         }
     );
-
-    response.send({ redirect: "http://localhost:8008"});
 });
 
 /* Function to get a list of all games in the database */
