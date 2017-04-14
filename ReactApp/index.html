@@ -14,16 +14,17 @@
    <body>
       <nav class="navbar navbar-default">
           <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    <img src="" alt="ImIn">
-                </a>
+            
+            <div class="Row" id="header">
+              <div class="Column"><a href="#"><img id="logo" src="logo.png" alt="ImIn"></a></div>
+              <div class="Column"><a href="#"><img id="name" src="name.png" alt="ImIn"></a></div>
+              <div class="Column" id="userInfo">
+                <div class="Column"><img src="" id="profilePicture" alt="profile_picture" style="width:50px;height:50px;"></div>
+                <div class="Column"><label id="username">username</label></div>
+                <div class="Column"><button id="facebookButton" class="btn" onclick="facebookAction();">FacebookButton</button></div>
+                </div>
+            </div>
 
-                <div id="proPic"><img src="" id="profilePicture" alt="profile_picture" style="width:50px;height:50px;"></div>
-                <div id="username">username</div>
-                <button id="facebookButton" onclick="facebookAction();">FacebookButton</button>
-                <button onclick="displayGames();">Display Games</button>
-              </div>
           </div>
       </nav>
 
