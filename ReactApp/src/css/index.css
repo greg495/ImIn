@@ -1,14 +1,126 @@
+.navbar {
+}
+
+.Row {
+    display:table;
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+
+.Column {
+    display:table-cell;
+    vertical-align: middle;
+}
+
+.detailLabel {
+    font-weight: bold;
+}
+
+#header {
+    width: 100%;
+}
+
+#userInfo {
+    float: right;
+    vertical-align: text-bottom;
+}
+
+#name {
+    display: block;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+#profilePicture {
+    border-radius: 8px;
+    vertical-align: middle;
+}
+
+#detailContainer {
+    width: 95%;
+    border-radius: 8px;
+    background-color: #f98686;
+    padding: 10px;
+    margin: auto;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+#detailContainer img {
+    border-radius: 8px;
+    padding-top: 2px;
+}
+
+#formContainer {
+    width:95%;
+    margin:auto;
+}
+
+#form {
+    border-radius: 8px;
+    background-color:   #83bffc;
+    padding: 10px;
+    margin: auto;
+    font-size: 16px;
+
+}
+
+
+
+
+
 #mapContainer {
     width:70%;
     height:100%;
 }
+
 #chatContainer {
     width:30%;
-    height:100%;
-    float: right;
 }
-#formContainer {
-    width:30%;
-    height:100%;
-    float: right;
+
+#wrapper { 
+	width:30%;
+	float:right;
+}
+
+#iminButton {
+	background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+#leaveGameButton {
+	background-color: #f44336; /* Red */
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+}
+
+#createGameButton {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
 }

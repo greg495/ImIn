@@ -14,22 +14,26 @@
    <body>
       <nav class="navbar navbar-default">
           <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    <img src="" alt="ImIn">
-                </a>
+            
+            <div class="Row" id="header">
+              <div class="Column"><a href="#"><img id="logo" src="logo.png" alt="ImIn"></a></div>
+              <div class="Column"><a href="#"><img id="name" src="name.png" alt="ImIn"></a></div>
+              <div class="Column" id="userInfo">
+                <div class="Column"><img src="" id="profilePicture" alt="profile_picture" style="width:50px;height:50px;"></div>
+                <div class="Column"><label id="username">username</label></div>
+                <div class="Column"><button id="facebookButton" class="btn" onclick="facebookAction();">FacebookButton</button></div>
+                </div>
+            </div>
 
-                <div id="proPic"><img src="" id="profilePicture" alt="profile_picture" style="width:50px;height:50px;"></div>
-                <div id="username">username</div>
-                <button id="facebookButton" onclick="facebookAction();">FacebookButton</button>
-                <button onclick="displayGames();">Display Games</button>
-              </div>
           </div>
       </nav>
 
       <div id="mapContainer"></div>
-      <div id="chatContainer"></div>
-      <div id="formContainer"></div>
+      <div id="wrapper">
+        <div id="chatContainer"></div>
+        <div id="formContainer"></div>
+        <div id="detailContainer"></div>
+      </div>
       <div id="sql"></div>
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -37,7 +41,8 @@
       <script src="bootstrap/js/bootstrap.min.js"></script>
       <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
       <script src="src/js/facebookIntegration.js"></script>
-      <script src="src/js/displayGames.js"></script>
+      <script src="src/js/gameDetails.js"></script>
+      <script src="src/js/imin.js"></script>
       <script src="index.js"></script>
    </body>
 </html>
