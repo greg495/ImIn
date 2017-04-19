@@ -213,6 +213,56 @@ app.get('/api/getUserInGame', function (req, response) {
     });
 });
 
+/* Function to get all messages for a specific game */
+app.get('/api/getGameMessages', function (req, response) {    
+    // Create query
+    var getGamesQuery = 'SELECT * FROM `messages` WHERE gameID="'+req.query.ID+'"';
+    
+    // Run query
+    connection.query(getGamesQuery, function(err, results, fields) {
+        if (!err) {
+            response.send( JSON.stringify(results) );
+            console.log('Sent list of messages for game.')
+        } else {
+            console.log('Error searching database.');
+        }
+    });
+});
+
+/* Function to add message for a specific game */
+app.post("/api/addMessage", function(req, response) {
+    // Create the queries
+    var tableCreation = `CREATE TABLE IF NOT EXISTS messages
+                (gameID BIGINT(20) NOT NULL,
+                 userID BIGINT(20) NOT NULL,
+                 firstName VARCHAR(127) NOT NULL,
+                 fullName VARCHAR(127) NOT NULL,
+                 message TEXT NOT NULL,
+                 date VARCHAR(127) NOT NULL,
+                 time VARCHAR(127) NOT NULL,
+                 messageID BIGINT NOT NULL AUTO_INCREMENT,
+                 PRIMARY KEY(messageID) )`;
+    var insertion = `INSERT INTO messages (gameID, userID, firstName, fullName, message, date, time ) VALUES ('${req.body.gameID}', '${req.body.userID}', '${req.body.firstName}', '${req.body.fullName}', '${req.body.msg}', '${req.body.date}', '${req.body.time}' )`;
+
+    // Make the table if needed
+    connection.query(tableCreation, function(err, results, fields) {
+        if (!err) {
+            console.log('Table was either made fine or already created.');
+        } else {
+            console.log('Error while making table.');
+        }
+    });
+
+    // Add user to the game
+    connection.query(insertion, function(err, results, fields) {
+        if (!err) {
+            console.log('Message added to database');
+        } else {
+            console.log('Error while performing add message query.');
+        }
+    });
+});
+
 var server = app.listen(local_port, function () {
     console.log('Server is running on ' + local_port);
 });

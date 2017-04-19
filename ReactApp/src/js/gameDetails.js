@@ -40,11 +40,6 @@ function showGameDetails(gameID) {
 		creator.innerHTML = data[0].creatorName;
 		detailContainer.appendChild(creatorLabel);
 		detailContainer.appendChild(creator);
-
-		// Make img for creator
-		// var creatorImage = document.createElement("img");
-		// creatorImage.setAttribute('src', 'https://graph.facebook.com/'+data[0].creatorID+'/picture')
-		//detailContainer.appendChild(creatorImage);
 		linebreak = document.createElement('BR');
 		detailContainer.appendChild(linebreak);
 
@@ -80,8 +75,6 @@ function showGameDetails(gameID) {
 		detailContainer.appendChild(description);
 		linebreak = document.createElement('BR');
 		detailContainer.appendChild(linebreak);
-		linebreak = document.createElement('BR');
-		detailContainer.appendChild(linebreak);
 
 		// Add the button and player list
 		addButton(gameID);
@@ -113,8 +106,6 @@ function addButton(gameID) {
 
 	    	// Add the button to the page
 	    	detailContainer.appendChild(button);
-			linebreak = document.createElement('BR');
-			detailContainer.appendChild(linebreak);
 
 	    	// Add the list of palyers
 	    	addPlayerList(gameID);
@@ -142,10 +133,104 @@ function addPlayerList(gameID) {
     		cell2.innerHTML = element.name;
     		var img = document.createElement('img');
     		img.src = 'https://graph.facebook.com/'+element.userID+'/picture';
-    		cell1.appendChild(img);
+    		var a=document.createElement('a');
+			a.href='https://facebook.com/'+element.userID;
+			a.target='_blank';
+    		a.appendChild(img)
+    		cell1.appendChild(a);
     	});
 
     	// Add the table to the game detail form
     	detailContainer.appendChild(userTable);
+		linebreak = document.createElement('BR');
+		detailContainer.appendChild(linebreak);
+    	
+    	// Add the chat messages
+    	showMessages(gameID);
     });
+}
+
+/* Function to display a list of chat messages */
+function showMessages(gameID) {
+	// Add the message board label
+	var messagesLabel = document.createElement("messagesLabel");
+    messagesLabel.innerHTML = "Message Board:";
+    messagesLabel.className += "detailLabel";
+	detailContainer.appendChild(messagesLabel);
+	linebreak = document.createElement('BR');
+	detailContainer.appendChild(linebreak);
+
+	// Get messages for current game
+	$.getJSON('/api/getGameMessages', 
+    {
+      ID: gameID
+    },function(data) {
+    	// Make a table of messages
+    	var messageTable = document.createElement("table");
+    	messageTable.style.width = '95%';
+
+    	// Check to see if there are any messages to display
+    	if  (data.length > 0) {
+    		data.forEach(function(element) {
+	    		var row = messageTable.insertRow(-1);
+	    		row.style.borderBottom="thin solid 	#383838"
+	    		row.style.borderTop="thin solid 	#383838"
+	    		var cell1 = row.insertCell(0);
+	    		var cell2 = row.insertCell(1);
+	    		cell2.innerHTML = element.message + '<br /><br />' + element.date + "  " + element.time;
+	    		var img = document.createElement('img');
+	    		img.src = 'https://graph.facebook.com/'+element.userID+'/picture';
+	    		var a=document.createElement('a');
+				a.href='https://facebook.com/'+element.userID;
+				a.target='_blank';
+	    		a.appendChild(img)
+	    		cell1.appendChild(a);
+	    		cell1.style.verticalAlign ='top';
+	    		cell1.style.width='55px';
+	    		cell1.style.paddingTop="2px";
+	    		cell1.appendChild(a);
+    		});
+    	} else {
+    		var secondRow = messageTable.insertRow(-1);
+    		secondRow.innerHTML = "No messages";
+    	}
+
+    	// Add the table to the game detail form
+    	detailContainer.appendChild(messageTable);
+		linebreak = document.createElement('BR');
+		detailContainer.appendChild(linebreak);
+
+    	// Show the new message form
+    	showMessageForm(gameID);
+    });
+}
+
+/* Function to display the new message form */
+function showMessageForm(gameID) {
+	// Get user info
+	FB.api('/me', {fields: 'name,first_name'}, function(response) {
+    	// Make the table for the form
+    	var formTable = document.createElement("table");
+    	var row = formTable.insertRow(0);
+	    var cell1 = row.insertCell(0);
+	    var cell2 = row.insertCell(1);
+
+    	// Make the text box
+		var textBox = document.createElement("textarea");
+		textBox.rows = 1;
+		textBox.className = "form-control";
+		cell1.style.width = '80%'
+		cell1.appendChild(textBox);
+
+		// Make the submit button
+		var button = document.createElement("button");
+		button.innerHTML = "Submit";	
+		button.addEventListener('click', function(){ submitMessage(gameID, textBox.value); });
+		button.className = "btn";
+		button.style.marginLeft = '3px';
+		cell2.appendChild(button);
+    	
+    	// Add the form to the page
+    	detailContainer.appendChild(formTable);
+	});
 }
