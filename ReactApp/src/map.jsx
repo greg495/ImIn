@@ -89,6 +89,7 @@ export class Container extends React.Component {
                     return <Marker name={marker.gameID}
                                    position={{lat:Number(marker.latitude), lng:Number(marker.longitude)}}
                                    onClick={this.onMarkerClick}
+                                   icon={"src/markerimages/" + marker.sport + ".png"}
                                    key={index} />
                 })}
 
