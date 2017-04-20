@@ -49,23 +49,24 @@ class Form extends React.Component {
         this.setState({
             latitude: window.createdMarkerPosition.lat,
             longitude: window.createdMarkerPosition.lng
-        });
+        }, ( ) => {
 
-        if (this.state.sport === "") {
-            $("#form").validate().showErrors({sport: "Please select a sport"});
-            return;
-        }
+            if (this.state.sport === "") {
+                $("#form").validate().showErrors({sport: "Please select a sport"});
+                return;
+            }
 
-        if (this.state.latitude === 0 && this.state.longitude == 0) {
-            $("#form").validate().showErrors({latitude: "Please place a marker first"});
-            return;
-        }
+            if (this.state.latitude === 0 && this.state.longitude == 0) {
+                $("#form").validate().showErrors({latitude: "Please place a marker first"});
+                return;
+            }
 
-        FB.api('/me', {fields: 'name,first_name'}, (response) => {
-            var stringToBeSent = $("#form").serialize()+`&creatorID=${response.id}`+`&creatorName=${response.name}`;
-    
-            $.post("/api/form", stringToBeSent, function(data, textStatus){
-                imin(data.gameID, true);
+            FB.api('/me', {fields: 'name,first_name'}, (response) => {
+                var stringToBeSent = $("#form").serialize()+`&creatorID=${response.id}`+`&creatorName=${response.name}`;
+        
+                $.post("/api/form", stringToBeSent, function(data, textStatus){
+                    imin(data.gameID, true);
+                });
             });
         });
 
