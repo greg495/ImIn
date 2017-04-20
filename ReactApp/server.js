@@ -80,7 +80,7 @@ app.post("/api/form", function(req, response) {
                      sport VARCHAR(127) NOT NULL,
                      latitude VARCHAR(127) NOT NULL,
                      longitude VARCHAR(127) NOT NULL,
-                     creatorID BIGINT(20) NOT NULL,
+                     creatorID VARCHAR(127) NOT NULL,
                      creatorName VARCHAR(127),
                      gameID BIGINT NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY(gameID) )`;
@@ -143,7 +143,7 @@ app.post("/api/imin", function(req, response) {
     // Create the queries
     var tableCreation = `CREATE TABLE IF NOT EXISTS attending
                 (gameID BIGINT(20) NOT NULL,
-                 userID BIGINT(20) NOT NULL,
+                 userID VARCHAR(127) NOT NULL,
                  name VARCHAR(127) NOT NULL )`;
     var insertion = `INSERT INTO attending (gameID, userID, name) VALUES ('${req.body.gameID}', '${req.body.userID}', '${req.body.name}' )`;
 
@@ -234,7 +234,7 @@ app.post("/api/addMessage", function(req, response) {
     // Create the queries
     var tableCreation = `CREATE TABLE IF NOT EXISTS messages
                 (gameID BIGINT(20) NOT NULL,
-                 userID BIGINT(20) NOT NULL,
+                 userID VARCHAR(127) NOT NULL,
                  firstName VARCHAR(127) NOT NULL,
                  fullName VARCHAR(127) NOT NULL,
                  message TEXT NOT NULL,
