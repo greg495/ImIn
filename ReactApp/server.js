@@ -32,11 +32,13 @@ app.use(bodyParser.urlencoded({
 
 /* Function to add a new user to the database */
 app.get('/api/addUser', function (req, response) {
+
     // Make sure user table exists
     var createTableQuery = 'CREATE TABLE IF NOT EXISTS users ' +
             '(id VARCHAR(256), ' +
             'fullName VARCHAR(256), ' +
             'firstName VARCHAR(256)) ';
+
     connection.query(createTableQuery, function(err, results, fields) {
         if (!err) {
         } else
@@ -72,6 +74,7 @@ app.get('/api/addUser', function (req, response) {
 
 /* Function to add a new game to the database */
 app.post("/api/form", function(req, response) {
+
     // Create the database queries
     var gameTableCreation = `CREATE TABLE IF NOT EXISTS games
                     (time VARCHAR(127),
@@ -108,6 +111,7 @@ app.post("/api/form", function(req, response) {
 
 /* Function to get a list of all games in the database */
 app.get('/api/getGames', function (req, response) {    
+
     // Create the query
     var getGamesQuery = 'SELECT * FROM `games`';
 
@@ -124,6 +128,7 @@ app.get('/api/getGames', function (req, response) {
 
 /* Function to get the details for a specific game */
 app.get('/api/getGameDetails', function (req, response) {    
+
     // Create the query
     var getGamesQuery = 'SELECT * FROM `games` WHERE gameID="'+req.query.ID+'"';
 
@@ -140,6 +145,7 @@ app.get('/api/getGameDetails', function (req, response) {
 
 /* Function to add user to a specific game */
 app.post("/api/imin", function(req, response) {
+
     // Create the queries
     var tableCreation = `CREATE TABLE IF NOT EXISTS attending
                 (gameID BIGINT(20) NOT NULL,
@@ -168,6 +174,7 @@ app.post("/api/imin", function(req, response) {
 
 /* Function to remove a user from a specific game */
 app.post("/api/leaveGame", function(req, response) {
+
     // Create the query
     var removal = 'DELETE FROM `attending` WHERE gameID="'+req.body.gameID+'" AND userID="'+req.body.userID+'"';
     
@@ -182,7 +189,8 @@ app.post("/api/leaveGame", function(req, response) {
 });
 
 /* Function to get all users attending a game */
-app.get('/api/getUsersAttending', function (req, response) {    
+app.get('/api/getUsersAttending', function (req, response) { 
+
     // Create query
     var getGamesQuery = 'SELECT * FROM `attending` WHERE gameID="'+req.query.ID+'"';
     
@@ -199,6 +207,7 @@ app.get('/api/getUsersAttending', function (req, response) {
 
 /* Function to see if a user is attending a specific game */
 app.get('/api/getUserInGame', function (req, response) {    
+
     // Create the query
     var getGamesQuery = 'SELECT * FROM `attending` WHERE gameID="'+req.query.gameID+'" AND userID="'+req.query.userID+'"';
     
@@ -215,6 +224,7 @@ app.get('/api/getUserInGame', function (req, response) {
 
 /* Function to get all messages for a specific game */
 app.get('/api/getGameMessages', function (req, response) {    
+
     // Create query
     var getGamesQuery = 'SELECT * FROM `messages` WHERE gameID="'+req.query.ID+'"';
     
@@ -231,6 +241,7 @@ app.get('/api/getGameMessages', function (req, response) {
 
 /* Function to add message for a specific game */
 app.post("/api/addMessage", function(req, response) {
+    
     // Create the queries
     var tableCreation = `CREATE TABLE IF NOT EXISTS messages
                 (gameID BIGINT(20) NOT NULL,
