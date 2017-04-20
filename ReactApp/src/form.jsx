@@ -56,6 +56,11 @@ class Form extends React.Component {
             return;
         }
 
+        if (this.state.date === "") {
+            $("#form").validate().showErrors({date: "Please select a date"});
+            return;
+        }
+
         if (this.state.latitude === 0 && this.state.longitude == 0) {
             $("#form").validate().showErrors({latitude: "Please place a marker first"});
             return;
@@ -65,8 +70,7 @@ class Form extends React.Component {
             var stringToBeSent = $("#form").serialize()+`&creatorID=${response.id}`+`&creatorName=${response.name}`;
     
             $.post("/api/form", stringToBeSent, function(data, textStatus){
-                window.location = data.redirect;
-                imin(data.gameID);
+                imin(data.gameID, true);
             });
         });
 

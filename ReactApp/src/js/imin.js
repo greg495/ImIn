@@ -1,5 +1,5 @@
 /* Function to add current user to game, gameID */
-function imin(gameID){
+function imin(gameID, reload=false){
 	// Get the user ID and name
 	FB.api('/me', {fields: 'name,first_name'}, function(response) {
 		// Add user to the game in the database
@@ -8,6 +8,10 @@ function imin(gameID){
 			userID: response.id,
 			name: response.name
 		}, function(data){});
+
+		if (reload) {
+			window.location = "http://localhost:8008";
+		}
 
 		// Reload form
 		showGameDetails(gameID);
