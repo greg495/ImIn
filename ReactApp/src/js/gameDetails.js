@@ -76,8 +76,16 @@ function showGameDetails(gameID) {
 		linebreak = document.createElement('BR');
 		detailContainer.appendChild(linebreak);
 
-		// Add the button and player list
-		addButton(gameID);
+		// Add the button if logged in
+		FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				addButton(gameID);
+			} else {
+				linebreak = document.createElement('BR');
+				detailContainer.appendChild(linebreak);
+				addPlayerList(gameID);
+			}
+		});
 	});
 }
 
@@ -200,8 +208,12 @@ function showMessages(gameID) {
 		linebreak = document.createElement('BR');
 		detailContainer.appendChild(linebreak);
 
-    	// Show the new message form
-    	showMessageForm(gameID);
+    	// Show the new message form if logged in
+		FB.getLoginStatus(function(response) {
+			if (response.status === 'connected') {
+				showMessageForm(gameID);
+			}
+		});
     });
 }
 

@@ -56,11 +56,6 @@ class Form extends React.Component {
             return;
         }
 
-        if (this.state.date === "") {
-            $("#form").validate().showErrors({date: "Please select a date"});
-            return;
-        }
-
         if (this.state.latitude === 0 && this.state.longitude == 0) {
             $("#form").validate().showErrors({latitude: "Please place a marker first"});
             return;
