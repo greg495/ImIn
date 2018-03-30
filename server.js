@@ -81,7 +81,7 @@ if (process.env.NODE_ENV === 'production'){
         }
     });
     console.log(`Webpack server listening on port ${webpack_server_port}.`);
-} else {
+} else if (process.env.Node_ENV === 'development' ) {
     const compiler = webpack(webpackConfig);
     // pass devServer options to the webpack server
     webpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions);
