@@ -110,6 +110,11 @@ process.on('SIGINT', function() {
     process.exit();
 });
 
+let errorHandling = function (e) {
+    console.log("http request error'd out");
+    console.log(e);
+}
+
 // Create the attending table
 var createAttendingTable = `CREATE TABLE IF NOT EXISTS attending
     (gameID BIGINT(20) NOT NULL,
@@ -208,7 +213,7 @@ app.get('/api/addUser', function (req, response) {
     });
 
     response.end();
-});
+}).on('error', errorHandling);
 
 /* Function to add a new game to the database */
 app.post("/api/form", function(req, response) {
@@ -223,7 +228,7 @@ app.post("/api/form", function(req, response) {
             console.log('Error while performing game adding query.');
         }
     );
-});
+}).on('error', errorHandling);
 
 /* Function to get a list of all games in the database */
 app.get('/api/getGames', function (req, response) {
@@ -239,7 +244,7 @@ app.get('/api/getGames', function (req, response) {
             console.log('Error searching database.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to get the details for a specific game */
 app.get('/api/getGameDetails', function (req, response) {
@@ -255,7 +260,7 @@ app.get('/api/getGameDetails', function (req, response) {
             console.log('Error searching database.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to add user to a specific game */
 app.post("/api/imin", function(req, response) {
@@ -269,7 +274,7 @@ app.post("/api/imin", function(req, response) {
             console.log('Error while performing user attending game query.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to remove a user from a specific game */
 app.post("/api/leaveGame", function(req, response) {
@@ -284,7 +289,7 @@ app.post("/api/leaveGame", function(req, response) {
             console.log('Error while removing player from game.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to get all users attending a game */
 app.get('/api/getUsersAttending', function (req, response) {
@@ -300,7 +305,7 @@ app.get('/api/getUsersAttending', function (req, response) {
             console.log('Error searching database.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to see if a user is attending a specific game */
 app.get('/api/getUserInGame', function (req, response) {
@@ -316,7 +321,7 @@ app.get('/api/getUserInGame', function (req, response) {
             console.log('Error searching database.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to get all messages for a specific game */
 app.get('/api/getGameMessages', function (req, response) {
@@ -332,7 +337,7 @@ app.get('/api/getGameMessages', function (req, response) {
             console.log('Error searching database.');
         }
     });
-});
+}).on('error', errorHandling);
 
 /* Function to add message for a specific game */
 app.post("/api/addMessage", function(req, response) {
@@ -346,7 +351,7 @@ app.post("/api/addMessage", function(req, response) {
             console.log('Error while performing add message query.');
         }
     });
-});
+}).on('error', errorHandling);
 
 var nodeServer = app.listen(node_server_port, function () {
     console.log('Node server is running on ' + node_server_port + ' in ' + process.env.NODE_ENV + ' mode.');
