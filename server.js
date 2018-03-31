@@ -93,8 +93,8 @@ if (process.env.NODE_ENV === 'production'){
 
 
 // Connect to database
-var sqlConnection = mysql.createConnection(app_data.sqlConfig);
-sqlConnection.connect(function(err) {
+var sqlPool = mysql.createPool(app_data.sqlConfig);
+sqlPool.connect(function(err) {
     if (err) {
         console.log("could not connect to database");
         couldNotConnect = true;
@@ -106,7 +106,7 @@ sqlConnection.connect(function(err) {
 // Do any work here to exit the server gracefully on ctrl+c
 process.on('SIGINT', function() {
     console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
-    sqlConnection.end();
+    if (sqlPool) sqlPool.end();
     process.exit();
 });
 
@@ -153,25 +153,25 @@ var createMessagesTable = `CREATE TABLE IF NOT EXISTS messages
     PRIMARY KEY(messageID) )`;
 
 var good = true;
-sqlConnection.query(createUsersTable, function(err, results, fields) {
+sqlPool.query(createUsersTable, function(err, results, fields) {
     if (err) {
         console.log('Error while making Users table.');
         good = false;
     }
 });
-sqlConnection.query(createGamesTable, function(err, results, fields) {
+sqlPool.query(createGamesTable, function(err, results, fields) {
     if (err) {
         console.log('Error while making Games table.');
         good = false;
     }
 });
-sqlConnection.query(createAttendingTable, function(err, results, fields) {
+sqlPool.query(createAttendingTable, function(err, results, fields) {
     if (err) {
         console.log('Error while making Attending table.');
         good = false;
     }
 });
-sqlConnection.query(createMessagesTable, function(err, results, fields) {
+sqlPool.query(createMessagesTable, function(err, results, fields) {
     if (err) {
         console.log('Error while making Messages table.');
         good = false;
@@ -191,13 +191,13 @@ app.use(bodyParser.urlencoded({
 app.get('/api/addUser', function (req, response) {
     // See if ID is already in database
     var findIdQuery = 'SELECT * FROM `users` WHERE id="'+req.query.id+'"';
-    sqlConnection.query(findIdQuery, function(err, results, fields) {
+    sqlPool.query(findIdQuery, function(err, results, fields) {
     if (!err) {
         if ( results.length == 0 ) {
 
             // Add new user to the database
             var addUserQuery = 'INSERT INTO `users`(`id`, `fullName`, `firstName`) VALUES ("' + req.query.id + '", "' + req.query.fullName + '", "' + req.query.firstName + '")';
-            sqlConnection.query(addUserQuery, function(err2, results2, fields2) {
+            sqlPool.query(addUserQuery, function(err2, results2, fields2) {
                 if (!err2) {
                     console.log('User: ' + req.query.fullName + ' added to Database!');
                 } else {
@@ -220,7 +220,7 @@ app.post("/api/form", function(req, response) {
     var gameInsertion = `INSERT INTO games (time, date, description, sport, latitude, longitude, creatorID, creatorName) VALUES ('${req.body.time}', '${req.body.date}', '${req.body.description}', '${req.body.sport}', '${req.body.latitude}', '${req.body.longitude}', '${req.body.creatorID}', '${req.body.creatorName}')`;
 
     // Add the game to the table
-    sqlConnection.query(gameInsertion, function(err, results, fields) {
+    sqlPool.query(gameInsertion, function(err, results, fields) {
         if (!err) {
             console.log("Game successfully added");
             response.send({ redirect: "http://localhost:8008", gameID: results['insertId']});
@@ -236,7 +236,7 @@ app.get('/api/getGames', function (req, response) {
     var getGamesQuery = 'SELECT * FROM `games`';
 
     // Run the query
-    sqlConnection.query(getGamesQuery, function(err, results, fields) {
+    sqlPool.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
             console.log('Sent list of all games.')
@@ -252,7 +252,7 @@ app.get('/api/getGameDetails', function (req, response) {
     var getGamesQuery = 'SELECT * FROM `games` WHERE gameID="'+req.query.ID+'"';
 
     // Run the query
-    sqlConnection.query(getGamesQuery, function(err, results, fields) {
+    sqlPool.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
             console.log('Sent game details.')
@@ -267,7 +267,7 @@ app.post("/api/imin", function(req, response) {
     var insertion = `INSERT INTO attending (gameID, userID, name) VALUES ('${req.body.gameID}', '${req.body.userID}', '${req.body.name}' )`;
 
     // Add user to the game
-    sqlConnection.query(insertion, function(err, results, fields) {
+    sqlPool.query(insertion, function(err, results, fields) {
         if (!err) {
             console.log('User is attending game.');
         } else {
@@ -282,7 +282,7 @@ app.post("/api/leaveGame", function(req, response) {
     var removal = 'DELETE FROM `attending` WHERE gameID="'+req.body.gameID+'" AND userID="'+req.body.userID+'"';
     
     // Run the query
-    sqlConnection.query(removal, function(err, results, fields) {
+    sqlPool.query(removal, function(err, results, fields) {
         if (!err) {
             console.log("User was successfuly removed from game.");
         } else {
@@ -297,7 +297,7 @@ app.get('/api/getUsersAttending', function (req, response) {
     var getGamesQuery = 'SELECT * FROM `attending` WHERE gameID="'+req.query.ID+'"';
     
     // Run query
-    sqlConnection.query(getGamesQuery, function(err, results, fields) {
+    sqlPool.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
             console.log('Sent list of users attending game.')
@@ -313,7 +313,7 @@ app.get('/api/getUserInGame', function (req, response) {
     var getGamesQuery = 'SELECT * FROM `attending` WHERE gameID="'+req.query.gameID+'" AND userID="'+req.query.userID+'"';
     
     // Run the query
-    sqlConnection.query(getGamesQuery, function(err, results, fields) {
+    sqlPool.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
             console.log("Sent response.")
@@ -329,7 +329,7 @@ app.get('/api/getGameMessages', function (req, response) {
     var getGamesQuery = 'SELECT * FROM `messages` WHERE gameID="'+req.query.ID+'"';
     
     // Run query
-    sqlConnection.query(getGamesQuery, function(err, results, fields) {
+    sqlPool.query(getGamesQuery, function(err, results, fields) {
         if (!err) {
             response.send( JSON.stringify(results) );
             console.log('Sent list of messages for game.')
@@ -344,7 +344,7 @@ app.post("/api/addMessage", function(req, response) {
     var insertion = `INSERT INTO messages (gameID, userID, firstName, fullName, message, date, time ) VALUES ('${req.body.gameID}', '${req.body.userID}', '${req.body.firstName}', '${req.body.fullName}', '${req.body.msg}', '${req.body.date}', '${req.body.time}' )`;
 
     // Add user to the game
-    sqlConnection.query(insertion, function(err, results, fields) {
+    sqlPool.query(insertion, function(err, results, fields) {
         if (!err) {
             console.log('Message added to database');
         } else {
@@ -355,4 +355,5 @@ app.post("/api/addMessage", function(req, response) {
 
 var nodeServer = app.listen(node_server_port, function () {
     console.log('Node server is running on ' + node_server_port + ' in ' + process.env.NODE_ENV + ' mode.');
+
 });
