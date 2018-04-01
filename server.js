@@ -94,21 +94,14 @@ if (process.env.NODE_ENV === 'production'){
 
 // Connect to database
 var sqlPool = mysql.createPool(app_data.sqlConfig);
-sqlPool.connect(function(err) {
-    if (err) {
-        console.log("could not connect to database");
-        couldNotConnect = true;
-    } else {
-        console.log("connected to database");
-    }
-});
 
 // Do any work here to exit the server gracefully on ctrl+c
-process.on('SIGINT', function() {
+var shutDownServer = function () {
     console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
     if (sqlPool) sqlPool.end();
-    process.exit();
-});
+    process.exit(1);
+};
+process.on('SIGINT', shutDownServer);
 
 let errorHandling = function (e) {
     console.log("http request error'd out");
@@ -152,33 +145,38 @@ var createMessagesTable = `CREATE TABLE IF NOT EXISTS messages
     messageID BIGINT NOT NULL AUTO_INCREMENT,
     PRIMARY KEY(messageID) )`;
 
-var good = true;
-sqlPool.query(createUsersTable, function(err, results, fields) {
-    if (err) {
-        console.log('Error while making Users table.');
-        good = false;
+var createTables = function (num) {
+    var statement, table;
+    switch (num) {
+        case 1:
+            statement = createUsersTable;
+            table = "Users";
+            break;
+        case 2:
+            statement = createGamesTable;
+            table = "Games";
+            break;
+        case 3:
+            statement = createAttendingTable;
+            table = "Attending";
+            break;
+        case 4:
+            statement = createMessagesTable;
+            table = "Messages";
+            break;
+        default:
+            return;
     }
-});
-sqlPool.query(createGamesTable, function(err, results, fields) {
-    if (err) {
-        console.log('Error while making Games table.');
-        good = false;
-    }
-});
-sqlPool.query(createAttendingTable, function(err, results, fields) {
-    if (err) {
-        console.log('Error while making Attending table.');
-        good = false;
-    }
-});
-sqlPool.query(createMessagesTable, function(err, results, fields) {
-    if (err) {
-        console.log('Error while making Messages table.');
-        good = false;
-    }
-});
-
-if (good) console.log('All tables have been created.');
+    sqlPool.query(statement, function(err, results, fields) {
+        if (err) {
+            console.log(`Error while making ${table} table.`);
+            shutDownServer();
+        }
+        createTables(num + 1);
+        if (num === 4) console.log('All tables have been created.');
+    });
+};
+createTables(1);
 
 // This helps with parsing the data sent from forms
 app.use(bodyParser.json());
